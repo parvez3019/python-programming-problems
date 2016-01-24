@@ -1,6 +1,6 @@
 __author__ = 'parvez'
 import pickle
-
+import sys
 
 class Node:
     def __init__(self, data):
@@ -35,7 +35,14 @@ class Tree:
         else:
             return self.search(node.left, data)
 
-    def deleteNode(self,node,data):
+    def minValue(self, node):
+        minv = node.data
+        while node.left is not None:
+            minv = node.left.data
+            node = node.left
+        return minv
+
+    def deleteNode(self, node, data):
         if node is None:
             return None
         # searching key into BST.
@@ -43,17 +50,29 @@ class Tree:
             node.left = self.deleteNode(node.left, data)
         elif data > node.data:
             node.right = self.deleteNode(node.right, data)
-        else: # reach to the node that need to delete from BST.
+        elif data == node.data:
+        # reach to the node that need to delete from BST.
+        #     print("node reached")
             if node.left is None and node.right is None:
                 del node
-            if node.left is None:
+                return None
+            elif node.left is None:
                 temp = node.right
-                del node
-                return temp
+                node.data = temp.data
+                del temp
+                return node
             elif node.right is None:
                 temp = node.left
-                del node
-                return temp
+                node.data = temp.data
+                del temp
+                return node
+            # Smallest value of right subtree
+
+            else :
+                node.data = self.minValue(node.right)
+                #deletion
+                node.right = self.deleteNode(node.right, node.data)
+
         return node
 
     def update(self, node, data, updatedata):
@@ -76,8 +95,11 @@ class Tree:
         file.close()
 
     def load_tree(self):
-        file = open('tree.p', 'r')
-        root = pickle.load(file)
+        try:
+            file = open('tree.p', 'r')
+            root = pickle.load(file)
+        except:
+            print("Error opening file.")
         file.close()
         return root
 
@@ -85,20 +107,55 @@ class Tree:
 def main():
     root = None
     tree = Tree()
-    root = tree.insert(root, 10)
-    tree.insert(root, 20)
-    tree.insert(root, 30)
-    tree.insert(root, 40)
-    tree.insert(root, 70)
-    tree.insert(root, 1)
-    tree.insert(root, 80)
-    tree.update(root, 70, 5)
-    print("Inorder Traversal Before saving ")
-    tree.Inorder(root)
-    tree.save_tree(root)
-    root = tree.load_tree()
-    print("After loading from disk")
-    tree.Inorder(root)
+    choice = -1
+    print("Choose any operation to perform:")
+
+    while choice is not 7:
+        print("1.To Insert a node.")
+        print("2.To Delete a node.")
+        print("3.To update a node.")
+        print("4.To Inorder Tree Traversal.")
+        print("5.To save tree to disk.")
+        print("6.To load tree from disk.")
+        print("7.To Exit.")
+        choice = input("Your Choice:")
+        if choice is 1:
+            if root is None:
+                data = input("Enter data to insert: ")
+                root = tree.insert(root, data)
+            else:
+                data = input("Enter data to insert: ")
+                tree.insert(root, data)
+        elif choice is 2:
+            if root is None:
+                print("Tree is empty")
+            else:
+                data = input("Enter node to delete: ")
+                tree.deleteNode(root, data)
+        elif choice is 3:
+            if root is None:
+                print("Tree is empty")
+            else:
+                data = input("Enter data need to be updated : ")
+                updated_data = input("Enter new data value : ")
+                tree.update(root,data,updated_data)
+        elif choice is 4:
+            if root is None:
+                print("Tree is empty")
+            else:
+                print("Inorder Traversal Before saving ")
+                tree.Inorder(root)
+        elif choice is 5:
+            if root is None:
+                print("Tree is empty")
+            else:
+                tree.save_tree(root)
+        elif choice is 6:
+            root = tree.load_tree()
+        elif choice is 7:
+            sys.exit()
+
+    print("Bye")
 
 
 if __name__ == "__main__":
