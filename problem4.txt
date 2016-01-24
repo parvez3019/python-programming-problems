@@ -1,0 +1,40 @@
+__author__ = 'parvez'
+
+Problem 4:
+=======
+
+In java and many ther High level languages by default strings are immutable(non-changeable) give a critical reasoning that why desginers of java and other such languages choose to handle string in this manner over the way its predecessors use to handle strings.
+If you think its rather a wrong methodology then please support your agrument.
+
+=======
+
+Okay, so after doing some research on string immutablity, now i finally understand the reason of choosing strings as immutable. Thanks for this interesting question. 
+After doing a bit of research i can say that i agree with this methodology of choosing string as immutabble for the following reasons :
+
+For Security Reasons: 
+	Parameters are typically represented as String in network connections, database connection urls, usernames/passwords etc. If it were mutable, these parameters could be easily changed.
+
+Efficiency:
+	The hashcode of string is frequently used in Java. For example, in a HashMap. Being immutable guarantees that hashcode will always the same, so that it can be cached without worrying the changes.That means, there is no need to calculate hashcode every time it is used.
+
+Synchronization and concurrency: 
+	Making String immutable automatically makes them thread safe thereby solving the synchronization issues.
+
+Caching: 
+	when compiler optimizes your String objects, it sees that if two objects have same value (a="test", and b="test") and thus you need only one string object (for both a and b, these two will point to the same object).
+	Class loading: String is used as arguments for class loading. If mutable, it could result in wrong class being loaded (because mutable objects change their state).
+
+Class loading:
+	String is used as arguments for class loading. If mutable, it could result in wrong class being loaded (because mutable objects change their state).
+
+Design :
+	Strings are created in a special memory area in java heap known as "String Intern pool". While you creating new String(Not in the case of using String() constructor or any other String functions which internally uses String() constructor for creating new String object; String() constructor always create new string constant in the pool unless we call the method intern()) variable it searches the pool to check whether is it already exist. If it is exist, then return reference of the existing String object. If the String is not immutable, changing the String with one reference will lead to the wrong value for the other references
+
+
+
+reference 
+- stackoverflow
+
+P.S 
+I just copied and paste the reasons but according to me that shouldn't make any difference,as the important thing is to understand the reason behind the methodlogy, i could have wrote these reasons by myself in my languauge but i things that is not needed(Just like programming we can use code/answer reusuablity), as the main thing is that i have understand the reason behind this, thanks to google and stackoverflow community and this also gave the solution to the problem.
+
