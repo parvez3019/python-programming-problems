@@ -67,4 +67,3 @@ Problem 4:
 In java and many ther High level languages by default strings are immutable(non-changeable) give a critical reasoning that why desginers of java and other such languages choose to handle string in this manner over the way its predecessors use to handle strings.
 
 If you think its rather a wrong methodology then please support your agrument.
-Problem Author: Anand Kumar Mishra (akm.coder@gmail.com)
